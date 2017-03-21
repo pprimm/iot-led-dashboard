@@ -4,12 +4,7 @@ const updateDevice = ({state, props}) => {
 }
 
 export default {
-  state: {
-    esp01: 0,
-    JustLED: 0,
-    PoeticNinja: 0,
-    'pp-bot': 0
-  },
+  state: {},
   signals: {
     deviceDataReceived: updateDevice
   }

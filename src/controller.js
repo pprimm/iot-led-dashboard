@@ -1,9 +1,13 @@
 import {Controller} from 'cerebral'
+import Devtools from 'cerebral/devtools'
 import devices from './modules/devices'
 import display from './modules/display'
 import mqtt from 'mqtt'
 
 const controller = Controller({
+  devtools: Devtools({
+  remoteDebugger: '127.0.0.1:8585'
+  }),
   modules: {
     devices,
     display
@@ -38,13 +42,11 @@ const botNameRegex = /get\/bots\/(.*)\/led/
 const dataReceived = controller.getSignal('devices.deviceDataReceived')
 
 mqttClient.on('message', function (topic, message) {
-  topic.replace(botNameRegex,
-    function (match, botName) {
-      let value = parseInt(message, 10)
-      if (value < 0) { value = 0 } else if (value > 100) { value = 100 }
-      dataReceived({device: botName, value: value})
-    }
-  )
+  topic.replace(botNameRegex, function (match, botName) {
+    let value = parseInt(message, 10)
+    if (value < 0) { value = 0 } else if (value > 100) { value = 100 }
+    dataReceived({device: botName, value: value})
+  })
 })
 
 export default controller
