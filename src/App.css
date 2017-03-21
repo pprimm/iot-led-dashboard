@@ -18,7 +18,20 @@
   text-align: left;
   font-size: large;
   padding: 0 1em 0 1em;
+  background-color: #34495e;
   color: white;
+}
+
+.Led-container {
+  display: flex;
+}
+
+.Led-title {
+  width: 60px;
+}
+
+.Led-line {
+  flex-grow: 1;
 }
 
 @keyframes App-logo-spin {

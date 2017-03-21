@@ -19,7 +19,12 @@ const BotItem = connect({
     return (
       <div>
         <p>{label} - {value}%</p>
-        <Line percent={value} strokeWidth={2} strokeColor={getColor(barIndex)}/>
+        <div className='Led-container'>
+          <div className='Led-title'>LED</div>
+          <div className='Led-line'>
+            <Line percent={value} strokeWidth={2} strokeColor={getColor(barIndex)}/>
+          </div>
+        </div>
         <hr />
       </div>
     )
