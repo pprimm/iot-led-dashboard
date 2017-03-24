@@ -1,5 +1,5 @@
 {
-  "name": "iot-web",
+  "name": "iot-led-dashboard",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {

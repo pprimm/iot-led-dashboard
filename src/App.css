@@ -22,16 +22,21 @@
   color: white;
 }
 
-.Led-container {
+.Item-container {
   display: flex;
 }
 
-.Led-title {
+.Item-title {
   width: 60px;
 }
 
-.Led-line {
+.Item-line {
   flex-grow: 1;
+}
+
+.Item-value {
+  text-align: right;
+  width: 60px;
 }
 
 @keyframes App-logo-spin {
