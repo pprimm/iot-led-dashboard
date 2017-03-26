@@ -16,9 +16,13 @@ const controller = Controller({
 
 const mqttClient = mqtt.connect('ws://10.10.101.31:8083/mqtt', {keepAlive: 1})
 
+const BOTS_TOPIC = 'get/bots/+/#'
+const DISPLAY_TOPIC = 'set/ui/display'
+
 mqttClient.on('connect', function (err) {
   console.info('MQTT: Connected')
-  mqttClient.subscribe('get/bots/+/#')
+  mqttClient.subscribe(BOTS_TOPIC)
+  mqttClient.subscribe(DISPLAY_TOPIC)
 })
 
 mqttClient.on('close', function (err) {
@@ -40,6 +44,7 @@ mqttClient.on('error', function (err) {
 const botNameRegex = /get\/bots\/(.*)\/(.*)/
 
 const dataReceived = controller.getSignal('devices.deviceDataReceived')
+const uiDefReceived = controller.getSignal('display.uiDefReceived')
 
 mqttClient.on('message', function (topic, message) {
   topic.replace(botNameRegex, function (match, deviceName, valueName) {
@@ -47,6 +52,10 @@ mqttClient.on('message', function (topic, message) {
     if (value < 0) { value = 0 } else if (value > 100) { value = 100 }
     dataReceived({device: deviceName, valueName: valueName, value: value})
   })
+  if (topic === DISPLAY_TOPIC) {
+    const msg = message.toString()
+    uiDefReceived(JSON.parse(msg))
+  }
 })
 
 export default controller
