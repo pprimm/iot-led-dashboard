@@ -15,6 +15,10 @@
 }
 
 .App-content {
+  max-width: 640px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   text-align: left;
   font-size: large;
   padding: 0 1em 0 1em;
