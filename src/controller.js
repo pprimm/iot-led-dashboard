@@ -6,7 +6,7 @@ import mqtt from 'mqtt'
 
 const controller = Controller({
   devtools: Devtools({
-  remoteDebugger: '10.10.101.31:8585'
+  remoteDebugger: '10.10.10.101:8585'
   }),
   modules: {
     devices,
@@ -14,7 +14,7 @@ const controller = Controller({
   }
 })
 
-const mqttClient = mqtt.connect('ws://10.10.101.31:8083/mqtt', {keepAlive: 1})
+const mqttClient = mqtt.connect('ws://10.10.10.101:8083/mqtt', {keepAlive: 1})
 
 const BOTS_TOPIC = 'get/bots/+/#'
 const DISPLAY_TOPIC = 'set/ui/display'
