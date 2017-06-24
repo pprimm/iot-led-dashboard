@@ -79,7 +79,6 @@ const App = connect({
     return (
       <div className='App'>
         <div className='App-header'>
-          <img src={logo} className='App-logo' alt='logo' />
           <h2>Realtime LED Dashboard</h2>
           <PotCheckBox label="Show Potentiometer Values" />
         </div>
