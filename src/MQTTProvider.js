@@ -1,5 +1,7 @@
 import mqtt from 'mqtt'
 
+const BOT_NAME_REGEX = /get\/bots\/(.*)\/(.*)/
+
 // We create a factory, allowing you to pass in options to it
 function MQTTProviderFactory (options = {}) {
   console.info('MQTTProviderFactory() called')
@@ -10,9 +12,9 @@ function MQTTProviderFactory (options = {}) {
   // typically just an object with some methods
   function createProvider (context) {
     console.info('createProvider() called')
-    const mqttClient = mqtt.connect('ws://localhost:8083/mqtt', {keepAlive: 1})
-    const BOTS_TOPIC = 'get/bots/+/#'
-    const DISPLAY_TOPIC = 'set/ui/display'
+    const mqttClient = mqtt.connect(options.mqttUrl, options.mqttOptions)
+    const BOTS_TOPIC = options.botsMqttTopic
+    const DISPLAY_TOPIC = options.displayMqttTopic
 
     mqttClient.on('connect', function (err) {
       console.info('MQTT: Connected')
@@ -32,18 +34,17 @@ function MQTTProviderFactory (options = {}) {
       console.info('MQTT: Reconnecting to MQTT Broker')
     })
 
-    const botNameRegex = /get\/bots\/(.*)\/(.*)/
-
-    const dataReceived = context.controller.getSignal('devices.deviceDataReceived')
-    const uiDefReceived = context.controller.getSignal('display.uiDefReceived')
+    const dataReceived = context.controller.getSignal(options.deviceUpdateSignalPath)
+    const uiDefReceived = context.controller.getSignal(options.displayDefinitionPath)
 
     mqttClient.on('message', function (topic, message) {
-      topic.replace(botNameRegex, function (match, deviceName, valueName) {
+      topic.replace(BOT_NAME_REGEX, function (match, deviceName, valueName) {
         let value = parseInt(message, 10)
         if (value < 0) { value = 0 } else if (value > 100) { value = 100 }
         dataReceived({device: deviceName, valueName: valueName, value: value})
       })
       if (topic === DISPLAY_TOPIC) {
+        console.debug(message)
         const msg = message.toString()
         uiDefReceived(JSON.parse(msg))
       }

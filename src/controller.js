@@ -12,7 +12,20 @@ const controller = Controller({
     devices,
     display
   },
-  providers: [MQTTProvider()]
+  providers: [
+    MQTTProvider({
+      mqttUrl: 'ws://localhost:8083/mqtt',
+      mqttOptions: {keepAlive: 1},
+      botsMqttTopic: 'get/bots/+/#',
+      displayMqttTopic: 'get/ui/display',
+      deviceUpdateSignalPath: 'devices.deviceDataReceived',
+      displayDefinitionPath: 'display.uiDefReceived'
+    })
+  ]
+})
+
+controller.on('initialized', () => {
+  console.info('Cerebral Controller initialized; THIS DOESN\'T FIRE')
 })
 
 export default controller
